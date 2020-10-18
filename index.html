@@ -19,18 +19,66 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"
     integrity="sha512-8Wy4KH0O+AuzjMm1w5QfZ5j5/y8Q/kcUktK9mPUVaUoBvh3QPUZB822W/vy7ULqri3yR8daH3F58+Y8Z08qzeg=="
     crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenLite.min.js"
+    integrity="sha512-/8phkpsAzxsbuX18zNkQ2gCq4Q5JsWoPo1jHLDeZorPUHRtx9YJxpdk+os05oDhPJVCNzA2/NMl4rmJyQ+6Fvg=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TimelineMax.min.js"
+    integrity="sha512-lJDBw/vKlGO8aIZB8/6CY4lV+EMAL3qzViHid6wXjH/uDrqUl+uvfCROHXAEL0T/bgdAQHSuE68vRlcFHUdrUw=="
+    crossorigin="anonymous"></script>
 
   <script>
 
     const scene = new THREE.Scene();
 
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setClearColor('#c9a2a5');
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     document.body.appendChild(renderer.domElement);
+
+    // resize window
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.apect = window.innerWidth / window.innerHeight;
+
+      camera.updateProjectionMatrix();
+    });
+
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshLambertMaterial({ color: 0xa8ceef });
+    const mesh = new THREE.Mesh(geometry, material);
+
+
+    // mesh.position.set(2, 2, -2);
+    // mesh.rotation.set(45, 0, 0);
+    // mesh.scale.set(1, 2, 1);
+
+    scene.add(mesh);
+
+    const light = new THREE.PointLight(0xFFFFFF, 1, 500);
+    light.position.set(10, 0, 25);
+    scene.add(light);
+
+    const render = function () {
+      requestAnimationFrame(render);
+
+      // mesh.rotation.x += 0.05;
+      // mesh.rotation.y += 0.01;
+
+      // mesh.scale.x -= 0.01;
+
+      renderer.render(scene, camera);
+    }
+
+    render();
+
+    this.tl = new TimeLineMax().delay(0.3);
+    this.tl.to(this.mesh.scale, 1, { x: 2, ease: Expo.easeOut });
+
+
 
   </script>
 </body>
